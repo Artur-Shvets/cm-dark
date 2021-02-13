@@ -4,7 +4,7 @@ let mainParent = false;
 let lastMouseOver = false;
 let sample = false;
 let mouseDown = false;
-let element;
+let element = false;
 let mouseDownLink = false;
 let svg;
 let v1;
@@ -17,20 +17,22 @@ let idList = [[]];
 
 // _________________________MOUSE OVER_______________________________
 function getMainParent (e) {
-  let block = e.target;
-  while (!block.classList.contains('main-parent') || !block.classList.contains('sample')) {
-    if (block.classList.contains('body')||block.classList.contains('sample')||block.classList.contains('main-parent')) break;
-    block = block.parentElement;
-  };
-  if (block.classList.contains('main-parent')) {
-    mainParent = block;
-  } else {
-    mainParent = false;
-  };
-  if (block.classList.contains('sample')) {
-    sample = block;
-  } else {
-    sample = false;
+  if (mouseEnter) {
+    let block = e.target;
+    while (!block.classList.contains('main-parent') || !block.classList.contains('sample')) {
+      if (!mouseEnter||block.classList.contains('body')||block.classList.contains('sample')||block.classList.contains('main-parent')) break;
+      block = block.parentElement;
+    };
+    if (block.classList.contains('main-parent')) {
+      mainParent = block;
+    } else {
+      mainParent = false;
+    };
+    if (block.classList.contains('sample')) {
+      sample = block;
+    } else {
+      sample = false;
+    };
   };
 };
 
@@ -62,8 +64,9 @@ function getActiveLight (e) {
     parent.style.background = 'rgba(40, 42, 46, 1)';
     lastMouseOver = parent;
   };
-  let nextParent = parent.parentElement;
+  // let nextParent = parent.parentElement;
   if (e.target.classList.contains('string') && !parent.classList.contains('row-block')) {
+    let nextParent = parent.parentElement;
     nextParent.style.background = 'rgba(40, 42, 46, 1)';
     lastMouseOver = nextParent;
   };
@@ -87,19 +90,44 @@ function getPastePosition (e) {
   };
 };
 
-// ___________________EVENT_____________________
+let mouseEnter = false;
+document.addEventListener('mouseenter', e => {
+  mouseEnter = true;
+  console.log(mouseEnter)
+})
+
+document.addEventListener('mouseleave', e => {
+  mouseEnter = false;
+  console.log(mouseEnter)
+})
+// _______EVENT_____________________
 document.addEventListener('mouseover', e => {
-  getActiveLight(e);
-  getMainParent(e);
-  if (mouseDown) {
-    deleteRowPosition();
-    getPastePosition(e);
-  };
+  if (mouseEnter) {
+    getActiveLight(e);
+    getMainParent(e);
+    if (mouseDown) {
+      getMainParent(e);
+      deleteRowPosition();
+      getPastePosition(e);
+    };
+  }
 });
 
 // _________________________MOUSE OVER_______________________________
 // ******************************************************************
 // _________________________MOUSE DOWN_______________________________
+
+
+// ___________________EVENT_____________________
+document.addEventListener('mousedown', (e) => {
+  if (mouseDown === false) {
+    mouseDown = true;
+  };
+});
+
+// _________________________MOUSE DOWN_______________________________
+// ******************************************************************
+// _________________________MOUSE MOVE_______________________________
 
 function putDraggableClass () {
   element.querySelectorAll('.row-block').forEach((block) => {
@@ -154,12 +182,13 @@ function takeLink (e) {
   svg.append(path);
 
   let inText = e.target.parentElement.children[0].innerText;
+  console
   if (inText == 'let' || inText == 'var' || inText == 'const') {
     element = document.getElementById('variable').cloneNode(true);
     element.id = '';
     element.classList.remove('sample')
     element.children[0].innerText = e.target.parentElement.children[1].innerText;
-    element.children[2].innerText = 'new value';
+    element.children[2].innerText = 'value';
     element.classList.add('draggable');
   };
   if (inText == 'function') {
@@ -167,7 +196,6 @@ function takeLink (e) {
     element.id = '';
     element.classList.remove('sample')
     element.children[0].innerText = e.target.parentElement.children[1].innerText;
-    // element.children[2].innerText = 'new value';
     element.classList.add('draggable');
   };
   element.prepend(v2);
@@ -202,33 +230,21 @@ function takeElement (e) {
     takeSample(e);
     putDraggableClass();
     setParameters(e);
-    mouseDown = true;
+    takeBlock = true;
   };
   if (mainParent && !e.target.classList.contains('vertex')) {
     takeParent(e);
-    mouseDown = true;
+    takeBlock = true;
   };
   if (!sample && e.target.classList.contains('v1')) {
     takeLink(e);
-    mouseDown = true;
+    takeBlock = true;
   };
 };
 
-// ___________________EVENT_____________________
-document.addEventListener('mousedown', e => {
-  if (mouseDown === false) {
-    mouseDown = true;
-  };
-});
-
-// _________________________MOUSE DOWN_______________________________
-// ******************************************************************
-// _________________________MOUSE MOVE_______________________________
-
-
 function doDynamicAllLinks () {
   let len = idList.length
-  for (let i = 1; i < len; i++) { // выведет 0, затем 1, затем 2
+  for (let i = 1; i < len; i++) {
     idList[i][1].forEach((svg, e, list) => {
       let vertex1 = document.getElementById(idList[i][0]);
       let link = document.getElementById(svg);
@@ -259,18 +275,19 @@ function doDynamicAllLinks () {
 
 let takeBlock = false;
 // ___________________EVENT_____________________
-window.addEventListener('mousemove', e => {
-  if (mouseDown && !takeBlock) {
-    takeElement(e);
-    takeBlock = true;
-  };
-  if (mouseDown && takeBlock) {
-    element.style.left = e.clientX + 10 + 'px';
-    element.style.top = e.clientY + 10 + 'px';
-    doDynamicAllLinks();
-  };
-  if (mainParent && !mouseDown) {
-    doDynamicAllLinks();
+document.addEventListener('mousemove', (e) => {
+  if (mouseEnter) {
+    if (mouseDown && !takeBlock) {
+      takeElement(e);
+    };
+    if (takeBlock) {
+      element.style.left = e.clientX + 10 + 'px';
+      element.style.top = e.clientY + 10 + 'px';
+      doDynamicAllLinks();
+    };
+    if (mainParent && !mouseDown) {
+      doDynamicAllLinks();
+    };
   };
 });
 
@@ -284,28 +301,28 @@ function pasteElement (e) {
     if (parent.classList.contains('sub-block-default')) {
       parent.classList.remove('sub-block-default');
       parent.classList.add('sub-block');
-    };
+    }
+    element.style.position = 'static';
+    element.style.transition = '0.3s';
+    element.classList.remove('main-parent');
+    element.style.background = '';
     let cloneBlock = element.cloneNode(true);
-    cloneBlock.style.position = 'static'
-    cloneBlock.style.transition = '0.3s';
-    cloneBlock.classList.remove('main-parent');
-    cloneBlock.style.background = '';
     paste.replaceWith(cloneBlock);
-  };
-};
+    element.remove();
+    takeBlock = false;
+  }
+}
 
 function putElement (e) {
-  if (e.target.classList.contains('work-space')) {
+  if (takeBlock) {
     element.style.background = '';
     element.style.transition = '0.3s';
     if (element.classList.contains('main-parent') === false) {
       element.classList.add('main-parent');
-    };
+    }
     document.getElementById('work-space').append(element);
-  } else {
-    element.remove();
-  };
-};
+  }
+}
 
 // ___________________EVENT_____________________
 document.addEventListener('mouseup', e => {
