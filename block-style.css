@@ -90,9 +90,9 @@ span {
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0);
   background-color: rgba(38, 50, 56, 0.1);
-  box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.2),
+  box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2),
               inset 3px 3px 12px rgba(0, 0, 0, 0.1),
-              3px 3px 8px rgba(0, 0, 0, 0.5),
+              1px 1px 2px rgba(0, 0, 0, 0.5),
               inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
@@ -113,9 +113,9 @@ span {
   border: 1px solid rgba(255, 255, 255, 0);
   transition: 0.3s;
   background-color: rgba(38, 50, 56, 0.1);
-  box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.2),
+  box-shadow: -2px -2px 3px rgba(255, 255, 255, 0.2),
               inset 3px 3px 12px rgba(0, 0, 0, 0.1),
-              3px 3px 8px rgba(0, 0, 0, 0.5),
+              2px 2px 3px rgba(0, 0, 0, 0.5),
               inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
@@ -135,9 +135,9 @@ span {
 .sub-block:hover {
   padding: 5px;
   border-radius: 15px;
-  box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.2),
+  box-shadow: -2px -2px 4px rgba(255, 255, 255, 0.2),
               inset 3px 3px 12px rgba(0, 0, 0, 0.1),
-              3px 3px 8px rgba(0, 0, 0, 0.5),
+              2px 2px 4px rgba(0, 0, 0, 0.5),
               inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
@@ -149,9 +149,9 @@ span {
 }
 
 .sub-block-default:hover {
-  box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.2),
+  box-shadow: -2px -2px 4px rgba(255, 255, 255, 0.2),
               inset 3px 3px 12px rgba(0, 0, 0, 0.1),
-              3px 3px 8px rgba(0, 0, 0, 0.5),
+              2px 2px 4px rgba(0, 0, 0, 0.5),
               inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
@@ -161,15 +161,24 @@ span {
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0);
   background-color: rgba(38, 50, 56, 0.1);
-  box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.2),
+  box-shadow: -2px -2px 4px rgba(255, 255, 255, 0.2),
               inset 3px 3px 12px rgba(0, 0, 0, 0.1),
-              3px 3px 8px rgba(0, 0, 0, 0.5),
+              3px 3px 6px rgba(0, 0, 0, 0.5),
               inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
-.main-parent {
-  /* background-color: rgba(38, 50, 56, 0.1); */
+.main-parent,
+.sample {
   backdrop-filter: blur(3px);
+  display: table;
+  transition: 0.3s;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0);
+  background-color: rgba(38, 50, 56, 0.1);
+  box-shadow: -2px -2px 4px rgba(255, 255, 255, 0.2),
+              inset 3px 3px 12px rgba(0, 0, 0, 0.1),
+              4px 4px 8px rgba(0, 0, 0, 0.5),
+              inset -3px -3px 12px rgba(255, 255, 255, 0.05)
 }
 
 .main-block:hover {
@@ -195,11 +204,11 @@ span {
 
 .red-string {
   color: #F07178;
-  background-color: rgb(240, 240, 240);
 }
 
-.red-shadow {
-  box-shadow: 0px 0px 4px #F07178;
+.red-shadow:hover {
+  border: 1px solid #F07178;
+  box-shadow: 0px 0px 12px #F07178;
 }
 
 .strong-orange-string {

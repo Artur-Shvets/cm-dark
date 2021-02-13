@@ -6,7 +6,7 @@ let lastClick;
 
 document.addEventListener('click', (e) => {
   if (mainParent) {
-    if (e.target.classList.contains('block')) {
+    if (e.target.classList.contains('block')||e.target.classList.contains('string')) {
       e.target.setAttribute('contenteditable', 'true');
       e.target.focus();
       isInput = true;
@@ -23,19 +23,19 @@ function createNewBlock (str, classList, focus) {
   if (classList) {
     classList.split(' ').forEach((item) => {
       newBlock.classList.add(item);
-    });
-  };
+    })
+  }
   if (str) {
     newBlock.innerText = str;
   } else {
     newBlock.innerText = '';
-  };
+  }
   lastElement.after(newBlock);
   lastElement = newBlock;
   if (focus) {
     newBlock.focus();
-  };
-};
+  }
+}
 
 document.addEventListener('keyup', e => {
   console.log(e.keyCode)
@@ -86,11 +86,21 @@ document.addEventListener('keyup', e => {
       };
       lastElement.parentElement.replaceWith(addEBlock);
     };
+    if (txt == 'true'||txt == 'false'||txt == 'null') {
+      lastElement.classList.add('block', 'red-string', 'red-shadow');
+      createNewBlock(false, false, true);
+    };
     if (lastSym == '.') {
       lastElement.innerText = lastTxt;
       createNewBlock(lastSym, 'string cyan-string');
       createNewBlock(false, 'string blue-string', true);
     };
+    if (lastSym == ';' || lastSym == '=' || lastSym == '&' || lastSym == '!') {
+      lastElement.classList.add('string', 'cyan-string');
+    };
+    // if (lastSym == '=') {
+    //   lastElement.classList.add('string', 'cyan-string');
+    // };
     if (e.keyCode == 32) {
       lastElement.innerText = lastElement.innerText.split(' ').join('');
       createNewBlock(false, 'p-left', true);
